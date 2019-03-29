@@ -92,7 +92,7 @@ def index():
 @app.route('/sqlite-demo')
 def sqlite_demo():
     rs = sqlite_conn()
-    print(rss)
+    print(rs)
     print('sqlite OK')
     if rs:
         return render_template('sqlite-test01.html', book=rs)
