@@ -8,6 +8,7 @@
 import pymysql
 import traceback
 from flask import Flask, redirect, render_template
+from page_utils import Pagination
 
 app = Flask(__name__)
 
@@ -68,7 +69,7 @@ def index():
 
     # 判断查询到的数据是否为空
     if rs:
-        return render_template('index02.html', book=rs)
+        return render_template('index02.html', book=rs,index_list=index_list,html=html)
     else:
         return '没有查询到数据'
 
