@@ -4,11 +4,10 @@
 # @Email        : cs.power.supply@gmail.com
 # @FileName     : mySQL.py
 # @Editor       : PyCharm
+import sqlite3
 
 import pymysql
-import traceback
 from flask import Flask, redirect, render_template
-from page_utils import Pagination
 
 app = Flask(__name__)
 
@@ -54,22 +53,49 @@ def db_connect(sql):
     return results
 
 
+def dict_factory(cursor, row):  # sqlite 查询返回字典类型 这是官方文档的说法
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
+def sqlite_conn():
+    conn = sqlite3.connect('master.db')  # 连接数据库
+    conn.row_factory = dict_factory # 定义查询返回类型 ，这里表示为返回字典
+    db = conn.cursor()  # 定义游标
+
+    # db.execute('insert into user (id, name) values (\'2\', \'Michael\')')
+    # print('-------------',str(db.rowcount))
+
+    # conn.commit() 提交修改事务
+    rs = db.execute('select * from user').fetchall()  # 执行SQL
+    # 关闭游标，关闭连接
+    db.close()
+    conn.close()
+    return rs
+
+
 @app.route('/mysql-demo')
 def index():
     sql = 'select * from atricle'  # where 1=2'
     rs = db_connect(sql)
-
-    # db.close()
-    # for row in results:
-    #     print(row[0])
     print(type(rs))
     print(len(rs))
-    # for row in rs:
-    #     print(row)
-
     # 判断查询到的数据是否为空
     if rs:
-        return render_template('index02.html', book=rs,index_list=index_list,html=html)
+        return render_template('mysql-test01.html', book=rs)
+    else:
+        return '没有查询到数据'
+
+
+@app.route('/sqlite-demo')
+def sqlite_demo():
+    rs = sqlite_conn()
+    print(rss)
+    print('sqlite OK')
+    if rs:
+        return render_template('sqlite-test01.html', book=rs)
     else:
         return '没有查询到数据'
 
