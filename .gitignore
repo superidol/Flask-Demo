@@ -790,3 +790,11 @@ _xmsgs/
 ### Redcar template
 .redcar
 
+!/templates/
+!/static/
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
+Pipfile
+Pipfile.lock
+master.db
+static/
